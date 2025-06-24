@@ -4,6 +4,7 @@ export interface Post {
   id: string;
   content: string;
   createdAt: string;
+  imageUrl?: string;
   author: {
     id: string;
     name: string | null;

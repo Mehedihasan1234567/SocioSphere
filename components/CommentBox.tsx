@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Comment } from "@/types/Comment";
+import Image from "next/image";
 
 interface CommentBoxProps {
   postId: string;
@@ -42,7 +43,9 @@ export default function CommentBox({
     <div className="bg-slate-800 p-4 rounded-xl shadow-lg mt-6">
       <form onSubmit={handleSubmit}>
         <div className="flex items-start space-x-4">
-          <img
+          <Image
+            width={44}
+            height={44}
             src={session?.user?.image ?? "/default-avatar.png"}
             alt="Your avatar"
             className="w-11 h-11 rounded-full"

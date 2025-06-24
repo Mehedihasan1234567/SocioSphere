@@ -12,6 +12,7 @@ import { PostPageSkeleton } from "@/components/PostPageSkeleton";
 import CommentBox from "@/components/CommentBox";
 import { CommentCard } from "@/components/CommentCard";
 import { ClientDateTime } from "@/components/ClientDateTime";
+import Image from "next/image";
 
 const HeartIcon = ({ filled }: { filled: boolean }) => (
   <svg
@@ -108,7 +109,9 @@ export default function PostPage() {
       {/* Main Post Section */}
       <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
         <div className="flex items-center mb-4">
-          <img
+          <Image
+            width={56}
+            height={56}
             src={post.author?.image ?? "/default-avatar.png"}
             alt="avatar"
             className="w-14 h-14 rounded-full mr-4"

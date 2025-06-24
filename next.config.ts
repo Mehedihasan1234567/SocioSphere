@@ -8,6 +8,12 @@ const nextConfig = {
         port: "",
         pathname: "/**", // Allows any path from this hostname
       },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+        port: "",
+        pathname: "/**", // Allows any path from this hostname
+      },
     ],
   },
 };

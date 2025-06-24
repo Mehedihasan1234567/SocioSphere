@@ -1,9 +1,12 @@
 import { Comment } from "@/types/Comment";
 import { ClientDateTime } from "./ClientDateTime";
+import Image from "next/image";
 export const CommentCard = ({ comment }: { comment: Comment }) => {
   return (
     <div className="flex items-start space-x-4 bg-slate-800 p-4 rounded-xl">
-      <img
+      <Image
+        width={44}
+        height={44}
         src={comment.author?.image ?? "/default-avatar.png"}
         alt="avatar"
         className="w-10 h-10 rounded-full"

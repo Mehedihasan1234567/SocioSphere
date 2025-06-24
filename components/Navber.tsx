@@ -1,4 +1,3 @@
-// components/Navbar.tsx
 "use client";
 
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -198,8 +197,10 @@ export default function Navbar() {
           <div className="text-center">
             {session ? (
               <>
-                <img
-                  src={session.user?.image || "/default-avatar.png"}
+                <Image
+                  width={96}
+                  height={96}
+                  src={session.user?.image ?? "/default-avatar.png"}
                   alt="Avatar"
                   className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-slate-700"
                 />
