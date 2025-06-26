@@ -1,4 +1,3 @@
-// app/signup/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -23,7 +22,7 @@ const GoogleIcon = () => (
     ></path>
     <path
       fill="#1976D2"
-      d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C42.012 36.49 44 30.638 44 24c0-1.341-.138-2.65-.389-3.917z"
+      d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C42.012 36.49 44 30.638 44 24c0-1.341-.138-2.650-.389-3.917z"
     ></path>
   </svg>
 );
@@ -51,7 +50,7 @@ export default function SignUp() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Failed to create an account.");
+        setError(data.error ?? "Failed to create an account.");
         return;
       }
 
@@ -64,7 +63,7 @@ export default function SignUp() {
       if (signInResult?.ok) {
         router.push("/");
       } else {
-        setError(signInResult?.error || "An error occurred during sign in.");
+        setError(signInResult?.error ?? "An error occurred during sign in.");
       }
     } catch (err) {
       setError("An unexpected error occurred. Please try again.");
@@ -74,93 +73,119 @@ export default function SignUp() {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-sm">
-      <h1 className="text-2xl font-bold mb-4 text-center">Create an Account</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Main Card */}
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-slate-800 mb-2">Join Us</h1>
+            <p className="text-slate-600">Create your account to get started</p>
+          </div>
 
-      <button
-        onClick={() => signIn("google", { callbackUrl: "/" })}
-        className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-gray-50 mb-4"
-      >
-        <GoogleIcon />
-        Sign up with Google
-      </button>
-
-      {/* Separator */}
-      <div className="relative flex py-2 items-center">
-        <div className="flex-grow border-t border-gray-300"></div>
-        <span className="flex-shrink mx-4 text-gray-400">OR</span>
-        <div className="flex-grow border-t border-gray-300"></div>
-      </div>
-
-      {/* Credentials Form */}
-      <form
-        onSubmit={handleCredentialsSubmit}
-        className="bg-white rounded pt-6 pb-8 mb-4"
-      >
-        {error && (
-          <p className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-            {error}
-          </p>
-        )}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Name
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-            disabled={isSubmitting}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Email
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-            disabled={isSubmitting}
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Password
-          </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            required
-            disabled={isSubmitting}
-          />
-        </div>
-        <div className="flex items-center justify-between">
+          {/* Google Sign Up Button */}
           <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-gray-400"
-            disabled={isSubmitting}
+            onClick={() => signIn("google", { callbackUrl: "/" })}
+            className="w-full flex items-center justify-center gap-3 bg-white border-2 border-slate-200 text-slate-700 font-semibold py-3 px-4 rounded-xl shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 mb-6 group"
           >
-            {isSubmitting ? "Signing Up..." : "Sign Up with Email"}
+            <GoogleIcon />
+            <span>Continue with Google</span>
           </button>
-        </div>
-      </form>
 
-      <p className="text-center text-gray-500 text-sm">
-        Already have an account?{" "}
-        <Link
-          href="/login"
-          className="font-bold text-blue-500 hover:text-blue-800"
-        >
-          Log In
-        </Link>
-      </p>
+          {/* Separator */}
+          <div className="relative flex py-4 items-center">
+            <div className="flex-grow border-t border-slate-200"></div>
+            <span className="flex-shrink mx-4 text-slate-400 text-sm font-medium bg-white px-2">
+              or sign up with email
+            </span>
+            <div className="flex-grow border-t border-slate-200"></div>
+          </div>
+
+          {/* Credentials Form */}
+          <form onSubmit={handleCredentialsSubmit} className="space-y-5">
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+                {error}
+              </div>
+            )}
+
+            {/* Name Field */}
+            <div>
+              <label className="block text-slate-700 text-sm font-semibold mb-2">
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-700 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                placeholder="Enter your full name"
+                required
+                disabled={isSubmitting}
+              />
+            </div>
+
+            {/* Email Field */}
+            <div>
+              <label className="block text-slate-700 text-sm font-semibold mb-2">
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-700 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                placeholder="Enter your email"
+                required
+                disabled={isSubmitting}
+              />
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label className="block text-slate-700 text-sm font-semibold mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-700 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                placeholder="Create a password"
+                required
+                disabled={isSubmitting}
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg mt-6"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Creating Account...
+                </div>
+              ) : (
+                "Create Account"
+              )}
+            </button>
+          </form>
+        </div>
+
+        {/* Footer */}
+        <p className="text-center text-slate-600 text-sm mt-6">
+          Already have an account?{" "}
+          <Link
+            href="/login"
+            className="font-semibold text-blue-600 hover:text-blue-700 transition-colors duration-200"
+          >
+            Sign in here
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
