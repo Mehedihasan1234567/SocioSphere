@@ -131,6 +131,17 @@ export default function PostPage() {
         <p className="text-lg text-slate-200 whitespace-pre-wrap mb-5">
           {post.content}
         </p>
+        {post.imageUrl && (
+          <div className="mt-4 rounded-xl overflow-hidden">
+            <Image
+              src={post.imageUrl}
+              alt="Post image"
+              width={800}
+              height={600}
+              className="w-full h-auto"
+            />
+          </div>
+        )}
         <div className="flex items-center space-x-8 pt-3 border-t border-slate-700">
           <button
             onClick={handleLike}

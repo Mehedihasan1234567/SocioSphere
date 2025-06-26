@@ -78,7 +78,6 @@ export default function Navbar() {
           <div className="flex justify-between items-center h-20">
             <Logo />
 
-            {/* -- DESKTOP NAVIGATION -- */}
             <div className="hidden md:flex items-center space-x-8">
               {status === "loading" ? (
                 <div className="w-48 h-8 bg-slate-700 rounded animate-pulse"></div>

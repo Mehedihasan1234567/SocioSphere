@@ -31,7 +31,7 @@ export default function CommentBox({
 
     if (res.ok) {
       const newComment = await res.json();
-      onCommentPosted(newComment); // Pass new comment to parent
+      onCommentPosted(newComment);
       setContent("");
     }
     setIsSubmitting(false);

@@ -53,7 +53,6 @@ export default function CreatePostForm({
     setError("");
     let imageUrl: string | null = null;
 
-    // Step 1: If a file is selected, upload it first
     if (file) {
       try {
         const authParams = await authenticator();
@@ -71,7 +70,6 @@ export default function CreatePostForm({
       }
     }
 
-    // Step 2: Create the post with the text and optional image URL
     const res = await fetch("/api/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

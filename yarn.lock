@@ -1898,11 +1898,6 @@ ignore@^7.0.0:
   resolved "https://registry.npmjs.org/ignore/-/ignore-7.0.5.tgz"
   integrity sha512-Hs59xBNfUIunMFgWAbGX5cq6893IbWg4KnrjbYwX3tx0ztorVgTDA6B2sxf8ejHJ4wz8BqGUMYlnzNBer5NvGg==
 
-imagekit-javascript@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/imagekit-javascript/-/imagekit-javascript-4.0.1.tgz#8e0590443d96f7c112879a004b0d423883ed3d44"
-  integrity sha512-V3eVMz7OW8w8dSNJXPtVcWQMdV0P1wRs+Bftb2B1bKRl8NjOf+NGRWYb/meJlrmSL/HxT68PjM92/XFB+9ZfJA==
-
 imagekit@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/imagekit/-/imagekit-6.0.0.tgz#b34c6acfaedac07c95204cbe3c8b8c791c0c1f1b"
@@ -2332,6 +2327,11 @@ lru-cache@^6.0.0:
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
+
+lucide-react@^0.523.0:
+  version "0.523.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.523.0.tgz#a855a3b5b6fdcdee597ecbbd3c16141711a1d974"
+  integrity sha512-rUjQoy7egZT9XYVXBK1je9ckBnNp7qzRZOhLQx5RcEp2dCGlXo+mv6vf7Am4LimEcFBJIIZzSGfgTqc9QCrPSw==
 
 magic-string@^0.30.17:
   version "0.30.17"

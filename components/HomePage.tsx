@@ -21,17 +21,14 @@ export default function HomePage() {
   }, []);
 
   const handlePostCreated = (newPost: Post) => {
-    // Add the new post to the top of the list for an instant update
     setPosts((prevPosts) => [newPost, ...prevPosts]);
   };
-
+  console.log("Posts fetched:", posts);
   return (
     <main className="bg-slate-900 min-h-screen">
       <div className="container mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* -- LEFT SIDEBAR -- */}
         <LeftSideBar />
 
-        {/* -- MAIN FEED -- */}
         <div className="lg:col-span-3">
           <h1 className="text-3xl font-bold mb-6 text-white">Home Feed</h1>
           <CreatePostForm onPostCreated={handlePostCreated} />
