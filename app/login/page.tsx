@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -151,9 +152,12 @@ export default function Login() {
           <div className="mt-8 text-center">
             <p className="text-gray-500 text-sm">
               Don't have an account?{" "}
-              <button className="text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200 hover:underline">
+              <Link
+                href="/signup"
+                className="font-semibold text-blue-600 hover:text-blue-700 transition-colors duration-200"
+              >
                 Sign up
-              </button>
+              </Link>
             </p>
           </div>
         </div>

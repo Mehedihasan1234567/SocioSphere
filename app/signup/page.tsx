@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 // Simple Google Icon component
 const GoogleIcon = () => (
@@ -73,119 +74,134 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Main Card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">Join Us</h1>
-            <p className="text-slate-600">Create your account to get started</p>
-          </div>
-
-          {/* Google Sign Up Button */}
-          <button
-            onClick={() => signIn("google", { callbackUrl: "/" })}
-            className="w-full flex items-center justify-center gap-3 bg-white border-2 border-slate-200 text-slate-700 font-semibold py-3 px-4 rounded-xl shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 mb-6 group"
-          >
-            <GoogleIcon />
-            <span>Continue with Google</span>
-          </button>
-
-          {/* Separator */}
-          <div className="relative flex py-4 items-center">
-            <div className="flex-grow border-t border-slate-200"></div>
-            <span className="flex-shrink mx-4 text-slate-400 text-sm font-medium bg-white px-2">
-              or sign up with email
-            </span>
-            <div className="flex-grow border-t border-slate-200"></div>
-          </div>
-
-          {/* Credentials Form */}
-          <form onSubmit={handleCredentialsSubmit} className="space-y-5">
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
-                {error}
-              </div>
-            )}
-
-            {/* Name Field */}
-            <div>
-              <label className="block text-slate-700 text-sm font-semibold mb-2">
-                Full Name
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-700 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
-                placeholder="Enter your full name"
-                required
-                disabled={isSubmitting}
-              />
+    <main>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          {/* Main Card */}
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-slate-800 mb-2">
+                Join Us
+              </h1>
+              <p className="text-slate-600">
+                Create your account to get started
+              </p>
             </div>
 
-            {/* Email Field */}
-            <div>
-              <label className="block text-slate-700 text-sm font-semibold mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-700 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
-                placeholder="Enter your email"
-                required
-                disabled={isSubmitting}
-              />
-            </div>
-
-            {/* Password Field */}
-            <div>
-              <label className="block text-slate-700 text-sm font-semibold mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-700 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
-                placeholder="Create a password"
-                required
-                disabled={isSubmitting}
-              />
-            </div>
-
-            {/* Submit Button */}
+            {/* Google Sign Up Button */}
             <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg mt-6"
-              disabled={isSubmitting}
+              onClick={() => signIn("google", { callbackUrl: "/" })}
+              className="w-full flex items-center justify-center gap-3 bg-white border-2 border-slate-200 text-slate-700 font-semibold py-3 px-4 rounded-xl shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 mb-6 group"
             >
-              {isSubmitting ? (
-                <div className="flex items-center justify-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Creating Account...
-                </div>
-              ) : (
-                "Create Account"
-              )}
+              <GoogleIcon />
+              <span>Continue with Google</span>
             </button>
-          </form>
-        </div>
 
-        {/* Footer */}
-        <p className="text-center text-slate-600 text-sm mt-6">
-          Already have an account?{" "}
-          <Link
-            href="/login"
-            className="font-semibold text-blue-600 hover:text-blue-700 transition-colors duration-200"
-          >
-            Sign in here
-          </Link>
-        </p>
+            {/* Separator */}
+            <div className="relative flex py-4 items-center">
+              <div className="flex-grow border-t border-slate-200"></div>
+              <span className="flex-shrink mx-4 text-slate-400 text-sm font-medium bg-white px-2">
+                or sign up with email
+              </span>
+              <div className="flex-grow border-t border-slate-200"></div>
+            </div>
+
+            {/* Credentials Form */}
+            <form onSubmit={handleCredentialsSubmit} className="space-y-5">
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+                  {error}
+                </div>
+              )}
+
+              {/* Name Field */}
+              <div>
+                <label className="block text-slate-700 text-sm font-semibold mb-2">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-700 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                  placeholder="Enter your full name"
+                  required
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              {/* Email Field */}
+              <div>
+                <label className="block text-slate-700 text-sm font-semibold mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-700 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                  placeholder="Enter your email"
+                  required
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              {/* Password Field */}
+              <div>
+                <label className="block text-slate-700 text-sm font-semibold mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-700 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                  placeholder="Create a password"
+                  required
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              {/* Submit Button */}
+
+              <button
+                type="submit"
+                className="group relative w-full bg-gradient-to-r from-blue-500/90 to-purple-600/90 backdrop-blur-lg text-white font-semibold py-4 px-6 rounded-2xl shadow-2xl hover:shadow-blue-500/25 transform hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none border border-white/20"
+                disabled={isSubmitting}
+              >
+                {/* Animated background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-700/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+
+                <div className="relative flex items-center justify-center gap-3">
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/60 border-t-white rounded-full animate-spin"></div>
+                      <span>Creating Account...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Create Account</span>
+                      <ArrowRight className="w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-1" />
+                    </>
+                  )}
+                </div>
+              </button>
+            </form>
+          </div>
+
+          {/* Footer */}
+          <p className="text-center text-slate-600 text-sm mt-6">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-semibold text-blue-600 hover:text-blue-700 transition-colors duration-200"
+            >
+              Sign in here
+            </Link>
+          </p>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
