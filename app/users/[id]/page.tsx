@@ -13,8 +13,6 @@ import { UserProfileSkeleton } from "@/components/UserProfileSkeleton";
 import Image from "next/image";
 import EditProfileModal from "@/components/EditProfileModal";
 
-// STEP 1: DELETE THE LOCAL INTERFACE DEFINITIONS THAT WERE HERE
-
 export default function UserProfilePage() {
   const params = useParams();
   const { id } = params;

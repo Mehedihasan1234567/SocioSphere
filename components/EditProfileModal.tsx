@@ -1,14 +1,8 @@
-// components/EditProfileModal.tsx
 "use client";
 
 import { useState, useRef } from "react";
 import { UserProfile } from "@/types/UserProfile";
-import {
-  upload,
-  ImageKitInvalidRequestError,
-  ImageKitServerError,
-  ImageKitUploadNetworkError,
-} from "@imagekit/next";
+import { upload, ImageKitServerError } from "@imagekit/next";
 import Image from "next/image";
 
 interface EditProfileModalProps {
@@ -24,7 +18,7 @@ export const EditProfileModal = ({
   user,
   onProfileUpdate,
 }: EditProfileModalProps) => {
-  const [name, setName] = useState(user.name || "");
+  const [name, setName] = useState(user.name ?? "");
   const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -53,7 +47,7 @@ export const EditProfileModal = ({
       return data;
     } catch (error) {
       console.error("❌ 3. Authenticator FAILED:", error);
-      throw error; // Re-throw the error to be caught by handleSubmit
+      throw error;
     }
   };
 
@@ -82,7 +76,7 @@ export const EditProfileModal = ({
         });
 
         console.log("✅ 4. ImageKit upload SUCCESS:", uploadResponse);
-        imageUrl = uploadResponse.url;
+        imageUrl = uploadResponse.url ?? null;
       } catch (uploadError) {
         let message = "Could not upload image.";
         if (uploadError instanceof ImageKitServerError)
@@ -121,7 +115,6 @@ export const EditProfileModal = ({
     }
   };
 
-  // ... rest of your JSX code remains the same
   if (!isOpen) return null;
 
   return (
@@ -159,7 +152,6 @@ export const EditProfileModal = ({
               <Image
                 width={64}
                 height={64}
-                // This shows the new image preview instantly!
                 src={
                   file
                     ? URL.createObjectURL(file)
@@ -223,4 +215,4 @@ export const EditProfileModal = ({
   );
 };
 
-export default EditProfileModal; // Add default export
+export default EditProfileModal;

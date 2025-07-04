@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Post } from "@/types/post";
 import { upload } from "@imagekit/next";
+import { UserAvatar } from "./UserAvater";
 
 const ImageIcon = () => (
   <svg
@@ -62,8 +63,8 @@ export default function CreatePostForm({
           folder: "/social-app-posts",
           ...authParams,
         });
-        imageUrl = uploadResponse.url;
-      } catch (err) {
+        imageUrl = uploadResponse.url ?? null;
+      } catch {
         setError("Image upload failed. Please try again.");
         setIsSubmitting(false);
         return;
@@ -109,13 +110,7 @@ export default function CreatePostForm({
       {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="flex items-start space-x-4">
-          <Image
-            src={session.user.image ?? "/default-avatar.png"}
-            width={48}
-            height={48}
-            alt="Your avatar"
-            className="w-12 h-12 rounded-full"
-          />
+          <UserAvatar userId={session.user.id} size={48} />
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}

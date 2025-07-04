@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-// Simple Google Icon component
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 48 48">
     <path
@@ -66,7 +65,7 @@ export default function SignUp() {
       } else {
         setError(signInResult?.error ?? "An error occurred during sign in.");
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -89,7 +88,6 @@ export default function SignUp() {
               </p>
             </div>
 
-            {/* Google Sign Up Button */}
             <button
               onClick={() => signIn("google", { callbackUrl: "/" })}
               className="w-full flex items-center justify-center gap-3 bg-white border-2 border-slate-200 text-slate-700 font-semibold py-3 px-4 rounded-xl shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 mb-6 group"
@@ -98,7 +96,6 @@ export default function SignUp() {
               <span>Continue with Google</span>
             </button>
 
-            {/* Separator */}
             <div className="relative flex py-4 items-center">
               <div className="flex-grow border-t border-slate-200"></div>
               <span className="flex-shrink mx-4 text-slate-400 text-sm font-medium bg-white px-2">
@@ -107,7 +104,6 @@ export default function SignUp() {
               <div className="flex-grow border-t border-slate-200"></div>
             </div>
 
-            {/* Credentials Form */}
             <form onSubmit={handleCredentialsSubmit} className="space-y-5">
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
@@ -115,7 +111,6 @@ export default function SignUp() {
                 </div>
               )}
 
-              {/* Name Field */}
               <div>
                 <label className="block text-slate-700 text-sm font-semibold mb-2">
                   Full Name
@@ -131,7 +126,6 @@ export default function SignUp() {
                 />
               </div>
 
-              {/* Email Field */}
               <div>
                 <label className="block text-slate-700 text-sm font-semibold mb-2">
                   Email Address
@@ -147,7 +141,6 @@ export default function SignUp() {
                 />
               </div>
 
-              {/* Password Field */}
               <div>
                 <label className="block text-slate-700 text-sm font-semibold mb-2">
                   Password
@@ -163,14 +156,11 @@ export default function SignUp() {
                 />
               </div>
 
-              {/* Submit Button */}
-
               <button
                 type="submit"
                 className="group relative w-full bg-gradient-to-r from-blue-500/90 to-purple-600/90 backdrop-blur-lg text-white font-semibold py-4 px-6 rounded-2xl shadow-2xl hover:shadow-blue-500/25 transform hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none border border-white/20"
                 disabled={isSubmitting}
               >
-                {/* Animated background */}
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-700/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
 
                 <div className="relative flex items-center justify-center gap-3">
@@ -190,7 +180,6 @@ export default function SignUp() {
             </form>
           </div>
 
-          {/* Footer */}
           <p className="text-center text-slate-600 text-sm mt-6">
             Already have an account?{" "}
             <Link

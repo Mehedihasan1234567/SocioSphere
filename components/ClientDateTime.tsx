@@ -1,4 +1,3 @@
-// components/ClientDateTime.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -26,9 +25,8 @@ export const ClientDateTime = ({
     setIsMounted(true);
   }, []);
 
-  // On the server and during initial client render, render nothing or a placeholder
   if (!isMounted) {
-    return null; // This guarantees no mismatch
+    return null;
   }
 
   const date = new Date(dateString);

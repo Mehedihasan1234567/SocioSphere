@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,6 +9,8 @@ import { Post } from "@/types/post";
 import { Comment } from "@/types/Comment";
 import { ClientDateTime } from "./ClientDateTime";
 import { CommentCard } from "./CommentCard";
+import { AtSign, Hash, MessageCircle, Send, Smile } from "lucide-react";
+import { UserAvatar } from "./UserAvater";
 
 const HeartIcon = ({ filled }: { filled: boolean }) => (
   <svg
@@ -27,21 +29,6 @@ const HeartIcon = ({ filled }: { filled: boolean }) => (
     />
   </svg>
 );
-const CommentIcon = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-    />
-  </svg>
-);
 
 export default function PostCard({ post }: { post: Post }) {
   const { data: session } = useSession();
@@ -54,12 +41,23 @@ export default function PostCard({ post }: { post: Post }) {
   const [commentContent, setCommentContent] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
-  // Check if current user has liked this post
+  // Enhanced comment input states
+  const [isFocused, setIsFocused] = useState(false);
+  const [charCount, setCharCount] = useState(0);
+  const [showEmojiHint, setShowEmojiHint] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const maxChars = 500;
+
   useEffect(() => {
     if (session?.user?.id) {
       setIsLiked(post.likes.some((like) => like.userId === session.user.id));
     }
   }, [post.likes, session]);
+
+  useEffect(() => {
+    setCharCount(commentContent.length);
+  }, [commentContent]);
 
   // --- HANDLER FUNCTIONS ---
 
@@ -80,8 +78,7 @@ export default function PostCard({ post }: { post: Post }) {
     }
   };
 
-  const handleCommentSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleCommentSubmit = async () => {
     if (!commentContent.trim() || !session) return;
     setIsSubmittingComment(true);
 
@@ -94,9 +91,9 @@ export default function PostCard({ post }: { post: Post }) {
 
       if (res.ok) {
         const newComment: Comment = await res.json();
-
         setComments((prevComments) => [newComment, ...prevComments]);
         setCommentContent("");
+        setIsFocused(false);
       }
     } catch (error) {
       console.error("Failed to post comment:", error);
@@ -105,17 +102,47 @@ export default function PostCard({ post }: { post: Post }) {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      handleCommentSubmit();
+    }
+  };
+
+  const insertText = (text: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const newValue =
+      commentContent.slice(0, start) + text + commentContent.slice(end);
+    setCommentContent(newValue);
+
+    // Focus back to textarea and set cursor position
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + text.length, start + text.length);
+    }, 0);
+  };
+
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    textarea.style.height = "auto";
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + "px";
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [commentContent]);
+
   return (
     <div className="bg-slate-800 text-white rounded-2xl shadow-lg border border-slate-700/50 flex flex-col">
       {/* Header */}
       <div className="flex items-center p-5">
-        <Image
-          src={post.author?.image ?? "/default-avatar.png"}
-          alt={`${post.author?.name}'s avatar`}
-          width={48}
-          height={48}
-          className="w-12 h-12 rounded-full border-2 border-slate-600"
-        />
+        <UserAvatar userId={post.author.id} size={48} />
         <div className="ml-4">
           <p className="font-bold text-lg text-white">
             {post.author?.name ?? "Anonymous"}
@@ -146,6 +173,7 @@ export default function PostCard({ post }: { post: Post }) {
         )}
       </div>
 
+      {/* Action Buttons */}
       <div className="flex justify-around items-center px-5 py-3 border-t border-slate-700/50 bg-slate-800/30">
         <button
           onClick={handleLike}
@@ -158,57 +186,175 @@ export default function PostCard({ post }: { post: Post }) {
           onClick={() => setShowComments(!showComments)}
           className="flex items-center space-x-2 text-slate-400 hover:text-blue-400 transition-colors"
         >
-          <CommentIcon />
+          <MessageCircle className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
           <span className="font-medium text-sm">
             {comments.length} Comments
           </span>
         </button>
       </div>
 
+      {/* Comments Section */}
       {showComments && (
         <div className="px-5 py-4 border-t border-slate-700/50">
           {session && (
-            <form
-              onSubmit={handleCommentSubmit}
-              className="flex items-start space-x-3 mb-4"
-            >
-              <Image
-                src={session.user.image ?? "/default-avatar.png"}
-                alt="Your avatar"
-                width={36}
-                height={36}
-                className="w-9 h-9 rounded-full mt-1"
-              />
+            <div className="mb-6">
+              {/* Enhanced Comment Input */}
+              <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl p-4 border border-slate-600/50">
+                <div className="flex items-start space-x-3">
+                  <UserAvatar userId={session.user.id} size={48} />
 
-              <div className="flex-1">
-                <textarea
-                  value={commentContent}
-                  onChange={(e) => setCommentContent(e.target.value)}
-                  placeholder="Write a comment..."
-                  className="w-full bg-slate-700/50 text-white p-2 rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
-                  rows={2}
-                />
-                <div className="text-right mt-2">
-                  <button
-                    type="submit"
-                    disabled={!commentContent.trim() || isSubmittingComment}
-                    className="bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium py-1 px-4 rounded-md disabled:bg-slate-600"
-                  >
-                    {isSubmittingComment ? "Posting..." : "Comment"}
-                  </button>
+                  <div className="flex-1 space-y-3">
+                    <div className="relative">
+                      <div
+                        className={`relative transition-all duration-300 ${
+                          isFocused
+                            ? "ring-2 ring-blue-500/50 shadow-lg shadow-blue-500/20"
+                            : ""
+                        }`}
+                      >
+                        <textarea
+                          ref={textareaRef}
+                          value={commentContent}
+                          onChange={(e) => setCommentContent(e.target.value)}
+                          onFocus={() => setIsFocused(true)}
+                          onBlur={() => setIsFocused(false)}
+                          onKeyDown={handleKeyDown}
+                          placeholder="What's on your mind? Share your thoughts..."
+                          className={`w-full bg-slate-700/70 text-white p-3 rounded-xl border-2 transition-all duration-300 resize-none overflow-hidden min-h-[60px] placeholder-slate-400 ${
+                            isFocused
+                              ? "border-blue-500 bg-slate-700/90"
+                              : "border-slate-600 hover:border-slate-500"
+                          } focus:outline-none`}
+                          style={{ fontFamily: "inherit" }}
+                        />
+
+                        {/* Floating action buttons */}
+                        <div
+                          className={`absolute right-2 top-2 flex gap-1 transition-opacity duration-300 ${
+                            isFocused
+                              ? "opacity-100"
+                              : "opacity-60 hover:opacity-100"
+                          }`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => insertText("😊")}
+                            onMouseEnter={() => setShowEmojiHint(true)}
+                            onMouseLeave={() => setShowEmojiHint(false)}
+                            className="p-1.5 text-slate-400 hover:text-yellow-400 hover:bg-slate-600/50 rounded-lg transition-all duration-200 relative"
+                          >
+                            <Smile size={14} />
+                            {showEmojiHint && (
+                              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-slate-900 text-xs text-white px-2 py-1 rounded whitespace-nowrap z-20">
+                                Add emoji
+                              </div>
+                            )}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => insertText("@")}
+                            className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-slate-600/50 rounded-lg transition-all duration-200"
+                          >
+                            <AtSign size={14} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => insertText("#")}
+                            className="p-1.5 text-slate-400 hover:text-green-400 hover:bg-slate-600/50 rounded-lg transition-all duration-200"
+                          >
+                            <Hash size={14} />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Character counter */}
+                      <div
+                        className={`text-right mt-1 text-xs transition-colors duration-300 ${
+                          charCount > maxChars * 0.8
+                            ? charCount > maxChars
+                              ? "text-red-400"
+                              : "text-yellow-400"
+                            : "text-slate-500"
+                        }`}
+                      >
+                        {charCount}/{maxChars}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs text-slate-400">
+                        <kbd className="px-1.5 py-0.5 bg-slate-700 rounded text-xs">
+                          Ctrl
+                        </kbd>
+                        <span>+</span>
+                        <kbd className="px-1.5 py-0.5 bg-slate-700 rounded text-xs">
+                          Enter
+                        </kbd>
+                        <span>to post</span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleCommentSubmit}
+                        disabled={
+                          !commentContent.trim() ||
+                          isSubmittingComment ||
+                          charCount > maxChars
+                        }
+                        className={`group relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 transform ${
+                          !commentContent.trim() ||
+                          isSubmittingComment ||
+                          charCount > maxChars
+                            ? "bg-slate-600 text-slate-400 cursor-not-allowed"
+                            : "bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white shadow-lg hover:shadow-blue-500/25 hover:scale-105 active:scale-95"
+                        } flex items-center gap-2`}
+                      >
+                        {isSubmittingComment ? (
+                          <>
+                            <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            Posting...
+                          </>
+                        ) : (
+                          <>
+                            <Send
+                              size={14}
+                              className="group-hover:translate-x-0.5 transition-transform duration-200"
+                            />
+                            Comment
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </form>
+
+              {/* Pro Tips (only show when focused) */}
+              {isFocused && (
+                <div className="mt-3 p-3 bg-slate-700/20 rounded-lg border border-slate-600/30 transition-all duration-300">
+                  <div className="text-xs text-slate-400 space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span>💡</span>
+                      <span>
+                        Use @ to mention • # for hashtags • Be respectful and
+                        constructive
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
 
+          {/* Comments List */}
           <div className="space-y-4">
             {comments.length > 0 ? (
               comments.map((comment) => (
                 <CommentCard key={comment.id} comment={comment} />
               ))
             ) : (
-              <p className="text-sm text-slate-400 text-center py-4">
-                Be the first to comment!
+              <p className="text-sm text-slate-400 text-center py-8 bg-slate-700/20 rounded-lg border border-slate-600/30">
+                💬 Be the first to comment!
               </p>
             )}
           </div>

@@ -1,17 +1,17 @@
-// app/api/users/[id]/route.ts
-
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-// Handles GET requests to /api/users/[id]
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+function getIdFromRequest(request: Request) {
+  const url = new URL(request.url);
+  const parts = url.pathname.split("/").filter(Boolean);
+  return parts[parts.length - 1];
+}
+
+export async function GET(request: Request) {
   try {
-    const userId = params.id;
+    const userId = getIdFromRequest(request);
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -46,13 +46,9 @@ export async function GET(
   }
 }
 
-// Handles PATCH requests to /api/users/[id]
-export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: Request) {
   const session = await getServerSession(authOptions);
-  const userIdToUpdate = params.id;
+  const userIdToUpdate = getIdFromRequest(request);
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

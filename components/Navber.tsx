@@ -4,6 +4,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useState, useEffect, useRef } from "react";
 import Logo from "@/components/logo";
 import Image from "next/image";
+import { UserAvatar } from "./UserAvater";
 
 const ProfileIcon = () => (
   <svg
@@ -87,13 +88,7 @@ export default function Navbar() {
                     className="flex text-sm rounded-full transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-800 focus:ring-blue-500"
                   >
                     <span className="sr-only">Open user menu</span>
-                    <Image
-                      src={session.user?.image ?? "/default-avatar.png"}
-                      width={40}
-                      height={40}
-                      alt="User Avatar"
-                      className="w-10 h-10 rounded-full"
-                    />
+                    <UserAvatar userId={session.user.id} size={44} />
                   </button>
                   {/* Profile Dropdown */}
                   {isProfileMenuOpen && (

@@ -84,7 +84,6 @@ export default function Login() {
               </div>
             </div>
 
-            {/* Password field */}
             <div className="relative">
               <label
                 className={`block text-sm font-medium mb-2 transition-colors duration-200 ${
@@ -127,7 +126,6 @@ export default function Login() {
               </div>
             </div>
 
-            {/* Submit button */}
             <button
               type="button"
               onClick={handleSubmit}
@@ -148,10 +146,9 @@ export default function Login() {
             </button>
           </div>
 
-          {/* Footer */}
           <div className="mt-8 text-center">
             <p className="text-gray-500 text-sm">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link
                 href="/signup"
                 className="font-semibold text-blue-600 hover:text-blue-700 transition-colors duration-200"
@@ -162,7 +159,6 @@ export default function Login() {
           </div>
         </div>
 
-        {/* Floating elements */}
         <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full opacity-60 animate-bounce delay-300"></div>
         <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full opacity-60 animate-bounce delay-700"></div>
       </div>

@@ -23,13 +23,11 @@ export async function POST(request: Request) {
     });
 
     if (existingLike) {
-      // Unlike the post
       await prisma.like.delete({
         where: { id: existingLike.id },
       });
       return NextResponse.json({ message: "Unliked" }, { status: 200 });
     } else {
-      // Like the post
       const like = await prisma.like.create({
         data: {
           post: {
@@ -42,7 +40,7 @@ export async function POST(request: Request) {
       });
       return NextResponse.json(like, { status: 201 });
     }
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 }
